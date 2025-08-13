@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentFilter = "all"
   let editingTaskId = null
 
+  let notificationPermission = localStorage.getItem("csuNotificationPermission") || "default"
+  const classReminders = new Map() // Store active reminders
+
   // DOM elements
   const logoutBtn = document.getElementById("logoutBtn")
   const addTaskBtn = document.getElementById("addTaskBtn")
@@ -27,6 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const tasksList = document.getElementById("tasksList")
   const scheduleList = document.getElementById("scheduleList")
   const filterBtns = document.querySelectorAll(".filter-btn")
+  const notificationBanner = document.getElementById("notificationBanner")
+  const enableNotificationsBtn = document.getElementById("enableNotifications")
+  const dismissNotificationsBtn = document.getElementById("dismissNotifications")
 
   // Event listeners
   logoutBtn.addEventListener("click", logout)
@@ -56,6 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === taskModal) closeTaskModal()
     if (e.target === classModal) closeClassModal()
   })
+
+  if (enableNotificationsBtn) {
+    enableNotificationsBtn.addEventListener("click", requestNotificationPermission)
+  }
+  if (dismissNotificationsBtn) {
+    dismissNotificationsBtn.addEventListener("click", dismissNotificationBanner)
+  }
 
   // Functions
   function logout() {
@@ -141,6 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
     classes.push(classData)
     localStorage.setItem("csuClasses", JSON.stringify(classes))
     renderSchedule()
+    if (notificationPermission === "granted") {
+      setupClassReminders()
+    }
     closeClassModal()
   }
 
@@ -295,9 +311,97 @@ document.addEventListener("DOMContentLoaded", () => {
     openTaskModal(task)
   }
 
+  function requestNotificationPermission() {
+    if ("Notification" in window) {
+      Notification.requestPermission().then((permission) => {
+        notificationPermission = permission
+        localStorage.setItem("csuNotificationPermission", permission)
+        if (permission === "granted") {
+          dismissNotificationBanner()
+          setupClassReminders()
+          showNotification("Notifications Enabled!", "You'll now receive class reminders.")
+        }
+      })
+    }
+  }
+
+  function dismissNotificationBanner() {
+    if (notificationBanner) {
+      notificationBanner.style.display = "none"
+      localStorage.setItem("csuNotificationDismissed", "true")
+    }
+  }
+
+  function showNotification(title, body, icon = "csu-logo.png") {
+    if (notificationPermission === "granted" && "Notification" in window) {
+      new Notification(title, {
+        body: body,
+        icon: icon,
+        badge: icon,
+      })
+    }
+  }
+
+  function setupClassReminders() {
+    // Clear existing reminders
+    classReminders.forEach((timeoutId) => clearTimeout(timeoutId))
+    classReminders.clear()
+
+    classes.forEach((classItem) => {
+      classItem.days.forEach((day) => {
+        scheduleClassReminder(classItem, day)
+      })
+    })
+  }
+
+  function scheduleClassReminder(classItem, day) {
+    const now = new Date()
+    const dayIndex = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"].indexOf(day)
+
+    // Calculate next occurrence of this day
+    const nextClass = new Date()
+    nextClass.setDate(now.getDate() + ((dayIndex + 7 - now.getDay()) % 7))
+
+    // Set the time (15 minutes before class)
+    const [hours, minutes] = classItem.startTime.split(":")
+    nextClass.setHours(Number.parseInt(hours), Number.parseInt(minutes) - 15, 0, 0)
+
+    // If the reminder time has passed today, schedule for next week
+    if (nextClass <= now) {
+      nextClass.setDate(nextClass.getDate() + 7)
+    }
+
+    const timeUntilReminder = nextClass.getTime() - now.getTime()
+
+    if (timeUntilReminder > 0 && timeUntilReminder <= 7 * 24 * 60 * 60 * 1000) {
+      // Within a week
+      const timeoutId = setTimeout(() => {
+        showNotification(
+          `Class Reminder: ${classItem.name}`,
+          `Your class starts in 15 minutes${classItem.room ? ` in ${classItem.room}` : ""}!`,
+        )
+
+        // Reschedule for next week
+        scheduleClassReminder(classItem, day)
+      }, timeUntilReminder)
+
+      classReminders.set(`${classItem.id}-${day}`, timeoutId)
+    }
+  }
+
   // Initial render
   renderTasks()
   renderSchedule()
+
+  if (notificationPermission !== "granted" && !localStorage.getItem("csuNotificationDismissed")) {
+    if (notificationBanner) {
+      notificationBanner.style.display = "flex"
+    }
+  }
+
+  if (notificationPermission === "granted") {
+    setupClassReminders()
+  }
 
   // Check for upcoming deadlines and show notifications
   function checkDeadlines() {
