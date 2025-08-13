@@ -12,33 +12,61 @@
         <div class="login-card">
             <div class="university-header">
                 <div class="university-logo">
-                    <!-- Replaced CSU text with actual university logo -->
                     <img src="csu-logo.png" alt="Caraga State University Logo" class="logo-image">
                 </div>
                 <h1>Caraga State University</h1>
-                <!-- Changed from "Student Task Manager" to "Student To Do List" -->
                 <h2>Student To Do List</h2>
             </div>
             
-            <form id="loginForm" class="login-form">
+            <!-- Added toggle between login and register modes -->
+            <div class="auth-toggle">
+                <button type="button" id="loginTab" class="auth-tab active">Sign In</button>
+                <button type="button" id="registerTab" class="auth-tab">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
                 <div class="form-group">
-                    <label for="email">University Email</label>
-                    <input type="email" id="email" name="email" placeholder="your.name@carsu.edu.ph" required>
-                    <div class="error-message" id="emailError"></div>
+                    <label for="loginEmail">University Email</label>
+                    <input type="email" id="loginEmail" name="email" placeholder="your.name@carsu.edu.ph" required>
+                    <div class="error-message" id="loginEmailError"></div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    <div class="error-message" id="passwordError"></div>
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+                    <div class="error-message" id="loginPasswordError"></div>
                 </div>
                 
-                <button type="submit" class="login-btn">Sign In</button>
-                
-                <div class="login-info">
-                    <p>Only students with valid @carsu.edu.ph email addresses can access this application.</p>
-                </div>
+                <button type="submit" class="auth-btn">Sign In</button>
             </form>
+
+            <!-- Registration Form -->
+            <form id="registerForm" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="registerEmail">University Email</label>
+                    <input type="email" id="registerEmail" name="email" placeholder="your.name@carsu.edu.ph" required>
+                    <div class="error-message" id="registerEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Create Password</label>
+                    <input type="password" id="registerPassword" name="password" placeholder="Create a secure password" required minlength="6">
+                    <div class="error-message" id="registerPasswordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                
+                <button type="submit" class="auth-btn">Register</button>
+            </form>
+            
+            <div class="login-info">
+                <p>Only students with valid @carsu.edu.ph email addresses can access this application.</p>
+            </div>
         </div>
     </div>
 
