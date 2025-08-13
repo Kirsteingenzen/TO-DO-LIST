@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CSU Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="university-info">
+                    <div class="logo-small">CSU</div>
+                    <div>
+                        <h1>CSU Task Manager</h1>
+                        <p id="userEmail"></p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="logout-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="dashboard-grid">
+                <!-- Tasks Section -->
+                <section class="tasks-section">
+                    <div class="section-header">
+                        <h2>My Tasks</h2>
+                        <button id="addTaskBtn" class="add-btn">+ Add Task</button>
+                    </div>
+                    
+                    <div class="task-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="pending">Pending</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                        <button class="filter-btn" data-filter="overdue">Overdue</button>
+                    </div>
+
+                    <div id="tasksList" class="tasks-list">
+                        <!-- Tasks will be dynamically added here -->
+                    </div>
+                </section>
+
+                <!-- Class Schedule Section -->
+                <section class="schedule-section">
+                    <div class="section-header">
+                        <h2>Class Schedule</h2>
+                        <button id="addClassBtn" class="add-btn">+ Add Class</button>
+                    </div>
+                    
+                    <div id="scheduleList" class="schedule-list">
+                        <!-- Schedule will be dynamically added here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Task</h3>
+                <button class="close-btn" id="closeTaskModal">&times;</button>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Task Title</label>
+                    <input type="text" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="taskDueDate">Due Date</label>
+                    <input type="datetime-local" id="taskDueDate">
+                </div>
+                <div class="form-group">
+                    <label for="taskPriority">Priority</label>
+                    <select id="taskPriority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskCategory">Category</label>
+                    <select id="taskCategory">
+                        <option value="assignment">Assignment</option>
+                        <option value="exam">Exam</option>
+                        <option value="project">Project</option>
+                        <option value="personal">Personal</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" id="cancelTask">Cancel</button>
+                    <button type="submit" class="save-btn">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Class Modal -->
+    <div id="classModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Class Schedule</h3>
+                <button class="close-btn" id="closeClassModal">&times;</button>
+            </div>
+            <form id="classForm">
+                <div class="form-group">
+                    <label for="className">Class Name</label>
+                    <input type="text" id="className" required>
+                </div>
+                <div class="form-group">
+                    <label for="classInstructor">Instructor</label>
+                    <input type="text" id="classInstructor">
+                </div>
+                <div class="form-group">
+                    <label for="classRoom">Room</label>
+                    <input type="text" id="classRoom">
+                </div>
+                <div class="form-group">
+                    <label for="classDays">Days</label>
+                    <div class="days-selector">
+                        <label><input type="checkbox" value="monday"> Monday</label>
+                        <label><input type="checkbox" value="tuesday"> Tuesday</label>
+                        <label><input type="checkbox" value="wednesday"> Wednesday</label>
+                        <label><input type="checkbox" value="thursday"> Thursday</label>
+                        <label><input type="checkbox" value="friday"> Friday</label>
+                        <label><input type="checkbox" value="saturday"> Saturday</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="classStartTime">Start Time</label>
+                        <input type="time" id="classStartTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="classEndTime">End Time</label>
+                        <input type="time" id="classEndTime" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" id="cancelClass">Cancel</button>
+                    <button type="submit" class="save-btn">Save Class</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
