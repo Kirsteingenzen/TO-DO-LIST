@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Valid credentials (in a real app, this would be handled by a backend)
   const validCredentials = {
-    "kirsteingenzen.nojapa@carsu.edu.ph": "secret",
+    "kirsteingenzen.nojapa@carsu.edu.ph": "kirsteingenzen.nojapa123!",
   }
 
   loginForm.addEventListener("submit", (e) => {
