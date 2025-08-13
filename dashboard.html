@@ -12,15 +12,24 @@
         <header class="dashboard-header">
             <div class="header-content">
                 <div class="university-info">
-                    <div class="logo-small">CSU</div>
+                    <!-- Replaced CSU text with actual university logo -->
+                    <img src="csu-logo.png" alt="CSU Logo" class="logo-small-img">
                     <div>
-                        <h1>CSU Task Manager</h1>
+                        <!-- Changed from "CSU Task Manager" to "CSU To Do List" -->
+                        <h1>CSU To Do List</h1>
                         <p id="userEmail"></p>
                     </div>
                 </div>
                 <button id="logoutBtn" class="logout-btn">Sign Out</button>
             </div>
         </header>
+
+        <!-- Added notification permission request and class reminder alerts -->
+        <div id="notificationBanner" class="notification-banner" style="display: none;">
+            <p>Enable notifications to get class reminders!</p>
+            <button id="enableNotifications" class="notification-btn">Enable</button>
+            <button id="dismissNotifications" class="notification-dismiss">×</button>
+        </div>
 
         <main class="dashboard-main">
             <div class="dashboard-grid">
